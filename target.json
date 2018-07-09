@@ -1,0 +1,78 @@
+{
+    "device":"MICROBIT",
+    "processor":"NRF51822",
+    "architecture":"CORTEX_M0",
+    "toolchain":"ARM_GCC",
+    "post_process":"python ./utils/merge_hex.py ./libraries/codal-microbit/lib/BLE_BOOTLOADER_RESERVED.hex ./libraries/codal-microbit/lib/s110_nrf51822_8.0.0_softdevice.hex <OUTPUT_HEX_LOCATION> -o <OUTPUT_HEX_DESTINATION>/<OUTPUT_HEX_NAME>-combined.hex",
+    "generate_bin":true,
+    "generate_hex":true,
+    "config":{
+        "DEVICE_SRAM_BASE":"0x20000008",
+        "DEVICE_SRAM_END":"0x20004000",
+        "DEVICE_STACK_BASE":"DEVICE_SRAM_END",
+        "DEVICE_STACK_SIZE":2048,
+        "DEVICE_HEAP_ALLOCATOR":1,
+        "DEVICE_TAG":0,
+        "SCHEDULER_TICK_PERIOD_US":4000,
+        "EVENT_LISTENER_DEFAULT_FLAGS":"MESSAGE_BUS_LISTENER_QUEUE_IF_BUSY",
+        "MESSAGE_BUS_LISTENER_MAX_QUEUE_DEPTH":10,
+        "USE_ACCEL_LSB":0,
+        "DEVICE_DEFAULT_SERIAL_MODE":"SYNC_SLEEP",
+        "DEVICE_COMPONENT_COUNT":20,
+        "DEVICE_DEFAULT_PULLMODE":"PullMode::None",
+        "DEVICE_PANIC_HEAP_FULL":1,
+        "DEVICE_DMESG_BUFFER_SIZE":256,
+        "CODAL_DEBUG":"CODAL_DEBUG_DISABLED",
+        "DEVICE_USB":0,
+        "CODAL_TIMESTAMP":"uint64_t",
+        "PROCESSOR_WORD_TYPE":"uint32_t"
+    },
+    "definitions":"-DTOOLCHAIN_GCC -DNRF51 -DTARGET_NORDIC -DTARGET_M0 -D__MBED__=1 -DMCU_NORDIC_16K -DTARGET_NRF51_MICROBIT -DTARGET_MCU_NORDIC_16K -DTARGET_MCU_NRF51_16K_S110  -DTARGET_NRF_LFCLK_RC -DTARGET_MCU_NORDIC_16K -D__CORTEX_M0 -DARM_MATH_CM0",
+    "cmake_definitions":{
+        "MBED_LEGACY_TARGET_DEFINITIONS":"NORDIC;NRF51_MICROBIT;MCU_NRF51822;MCU_NRF51_16K;MCU_NORDIC_16K;MCU_NRF51_16K_S110;",
+        "MBED_LEGACY_TOOLCHAIN":"GCC_ARM;"
+    },
+    "cpu_opts":"-mcpu=cortex-m0 -mthumb -D__thumb2__",
+    "asm_flags":"-fno-exceptions -fno-unwind-tables --specs=nosys.specs",
+    "c_flags":"-std=c99 --specs=nosys.specs  -Wno-array-bounds",
+    "cpp_flags":"-std=c++11 -fwrapv -fno-rtti -fno-threadsafe-statics -fno-exceptions -fno-unwind-tables -Wl,--gc-sections -Wl,--sort-common -Wl,--sort-section=alignment -Wno-array-bounds",
+    "linker_flags":"-Wl,--no-wchar-size-warning,-wrap,main",
+    "libraries":[
+        {
+            "name":"codal-core",
+            "url":"https://github.com/lancaster-university/codal-core",
+            "branch":"master",
+            "type":"git"
+        },
+        {
+            "name":"codal-mbed",
+            "url":"https://github.com/lancaster-university/codal-mbed",
+            "branch":"master",
+            "type":"git"
+        },
+        {
+            "name":"ble",
+            "url":"https://github.com/lancaster-university/BLE_API",
+            "branch":"v2.5.0+mb3",
+            "type":"git"
+        },
+        {
+            "name":"ble-nrf51822",
+            "url":"https://github.com/lancaster-university/nrf51822",
+            "branch":"v2.5.0+mb7",
+            "type":"git"
+        },
+        {
+            "name":"nrf51-sdk",
+            "url":"https://github.com/lancaster-university/nrf51-sdk",
+            "branch":"v2.2.0+mb4",
+            "type":"git"
+        },
+        {
+            "name":"mbed-classic",
+            "url":"https://github.com/lancaster-university/mbed-classic",
+            "branch":"new-build-system",
+            "type":"git"
+        }
+    ]
+}
