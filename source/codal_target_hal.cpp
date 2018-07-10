@@ -1,3 +1,27 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2017 Lancaster University.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+*/
+
 #include "mbed.h"
 #include "codal_target_hal.h"
 #include "CodalDmesg.h"
@@ -74,16 +98,7 @@ struct PROCESSOR_TCB
 
 PROCESSOR_WORD_TYPE fiber_initial_stack_base()
 {
-    uint32_t mbed_stack_base;
-
-#ifdef MBED_CONF_RTOS_PRESENT
-    extern osThreadDef_t os_thread_def_main;
-    mbed_stack_base = (uint32_t)os_thread_def_main.stack_pointer + os_thread_def_main.stacksize;
-#else
-    mbed_stack_base = DEVICE_STACK_BASE;
-#endif
-
-    return mbed_stack_base;
+    return DEVICE_STACK_BASE;
 }
 
 void* tcb_allocate()
@@ -129,11 +144,7 @@ PROCESSOR_WORD_TYPE tcb_get_stack_base(void* tcb)
 
 PROCESSOR_WORD_TYPE get_current_sp()
 {
-#ifdef MBED_CONF_RTOS_PRESENT
-    return __get_PSP();
-#else
     return __get_MSP();
-#endif
 }
 
 PROCESSOR_WORD_TYPE tcb_get_sp(void* tcb)
@@ -152,4 +163,3 @@ void tcb_configure_args(void* tcb, PROCESSOR_WORD_TYPE ep, PROCESSOR_WORD_TYPE c
 
 extern PROCESSOR_WORD_TYPE __end__;
 PROCESSOR_WORD_TYPE codal_heap_start = (PROCESSOR_WORD_TYPE)(&__end__);
-

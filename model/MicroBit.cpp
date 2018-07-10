@@ -31,14 +31,49 @@ using namespace codal;
 //
 // Matrix layout model for LED Matrix
 //
-static const MatrixPoint ledMatrixPositions[5*5] =
+// static const MatrixPoint ledMatrixPositions[5*5] =
+// {
+//     {0,0},{0,1},{0,2},{0,3},{0,4},
+//     {1,0},{1,1},{1,2},{1,3},{1,4},
+//     {2,0},{2,1},{2,2},{2,3},{2,4},
+//     {3,0},{3,1},{3,2},{3,3},{3,4},
+//     {4,0},{4,1},{4,2},{4,3},{4,4}
+// };
+
+// static const MatrixPoint ledMatrixPositions[5*5] =
+// {
+//     {0,0},{1,3},{0,1},{1,4},{0,2},
+//     {2,3},{2,4},{2,5},{2,6},{2,7},
+//     {1,1},{0,8},{1,2},{2,8},{1,0},
+//     {0,7},{0,6},{0,5},{0,4},{0,3},
+//     {2,2},{1,6},{2,0},{1,5},{2,1}
+// };
+
+
+// static const MatrixPoint ledMatrixPositions[5*5] =
+// {
+//     {0,0},{3,1},{1,0},{4,1},{2,0},
+//     {3,2},{4,2},{5,2},{6,2},{7,2},
+//     {1,1},{8,0},{2,1},{8,2},{0,1},
+//     {7,0},{6,0},{5,0},{4,0},{3,0},
+//     {2,2},{6,1},{0,2},{5,1},{1,2}
+// };
+
+
+static const MatrixPoint ledMatrixPositions[3*9] =
 {
-    {0,0},{0,1},{0,2},{0,3},{0,4},
-    {1,0},{1,1},{1,2},{1,3},{1,4},
-    {2,0},{2,1},{2,2},{2,3},{2,4},
-    {3,0},{3,1},{3,2},{3,3},{3,4},
-    {4,0},{4,1},{4,2},{4,3},{4,4}
+    {0,0},{4,2},{2,4},
+    {2,0},{0,2},{4,4},
+    {4,0},{2,2},{0,4},
+    {4,3},{1,0},{0,1},
+    {3,3},{3,0},{1,1},
+    {2,3},{3,4},{2,1},
+    {1,3},{1,4},{3,1},
+    {0,3},{NO_CONN,NO_CONN},{4,1},
+    {1,2},{NO_CONN,NO_CONN},{3,2}
 };
+
+
 
 /**
   * Constructor.
@@ -54,11 +89,10 @@ MicroBit::MicroBit() :
     io(),
     i2c(io.sda, io.scl),
 
-    // RED
     ledRowPins{&io.row1, &io.row2, &io.row3},
-    ledColPins{&io.col1, &io.col2, &io.col6, &io.col4, &io.col5, &io.col6, &io.col7, &io.col8, &io.col9},
+    ledColPins{&io.col1, &io.col2, &io.col3, &io.col4, &io.col5, &io.col6, &io.col7, &io.col8, &io.col9},
 
-    ledMatrixMap{ 5, 5, 5, 5, (Pin**)ledRowPins, (Pin**)ledColPins, ledMatrixPositions},
+    ledMatrixMap{ 5, 5, 3, 9, (Pin**)ledRowPins, (Pin**)ledColPins, ledMatrixPositions},
     display(ledMatrixMap),
     buttonA(io.buttonA, DEVICE_ID_BUTTON_A, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW),
     buttonB(io.buttonB, DEVICE_ID_BUTTON_B, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW),

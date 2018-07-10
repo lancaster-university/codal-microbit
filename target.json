@@ -33,10 +33,10 @@
         "MBED_LEGACY_TOOLCHAIN":"GCC_ARM;"
     },
     "cpu_opts":"-mcpu=cortex-m0 -mthumb -D__thumb2__",
-    "asm_flags":"-fno-exceptions -fno-unwind-tables --specs=nosys.specs",
-    "c_flags":"-std=c99 --specs=nosys.specs  -Wno-array-bounds",
-    "cpp_flags":"-std=c++11 -fwrapv -fno-rtti -fno-threadsafe-statics -fno-exceptions -fno-unwind-tables -Wl,--gc-sections -Wl,--sort-common -Wl,--sort-section=alignment -Wno-array-bounds",
-    "linker_flags":"-Wl,--no-wchar-size-warning,-wrap,main",
+    "asm_flags":"-fno-exceptions -fno-unwind-tables --specs=nosys.specs -mcpu=cortex-m0 -mthumb",
+    "c_flags":"-std=c99 --specs=nano.specs -mcpu=cortex-m0 -mthumb  -Wno-array-bounds",
+    "cpp_flags":"-mcpu=cortex-m0 -mthumb -std=c++11 -fwrapv -fno-rtti -fno-threadsafe-statics -fno-exceptions -fno-unwind-tables -Wl,--gc-sections -Wl,--sort-common -Wl,--sort-section=alignment -Wno-array-bounds",
+    "linker_flags":"-mcpu=cortex-m0 -mthumb -Wl,--no-wchar-size-warning,-wrap,main",
     "libraries":[
         {
             "name":"codal-core",
