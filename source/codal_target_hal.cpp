@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
 #include "mbed.h"
 #include "codal_target_hal.h"
 #include "CodalDmesg.h"
+#include "CodalCompat.h"
 
 void target_enable_irq()
 {
@@ -44,6 +45,11 @@ void target_wait_for_event()
 void target_wait(uint32_t milliseconds)
 {
     wait_ms(milliseconds);
+}
+
+void target_wait_us(unsigned long us)
+{
+    wait_us(us);
 }
 
 void target_reset()
@@ -70,6 +76,15 @@ void target_panic(int statusCode)
 #endif
 }
 
+int target_seed_random(uint32_t rand)
+{
+    return codal::seed_random(rand);
+}
+
+int target_random(int max)
+{
+    return codal::random(max);
+}
 /**
   *  Thread Context for an ARM Cortex M0 core.
   *
