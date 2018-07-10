@@ -53,19 +53,19 @@
         {
             "name":"ble",
             "url":"https://github.com/lancaster-university/BLE_API",
-            "branch":"v2.5.0+mb3",
+            "branch":"codal-microbit",
             "type":"git"
         },
         {
             "name":"ble-nrf51822",
             "url":"https://github.com/lancaster-university/nrf51822",
-            "branch":"v2.5.0+mb7",
+            "branch":"codal-microbit",
             "type":"git"
         },
         {
             "name":"nrf51-sdk",
             "url":"https://github.com/lancaster-university/nrf51-sdk",
-            "branch":"v2.2.0+mb4",
+            "branch":"codal-microbit",
             "type":"git"
         },
         {
