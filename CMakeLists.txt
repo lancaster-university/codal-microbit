@@ -38,8 +38,7 @@ add_library(codal-microbit ${SOURCE_FILES})
 
 target_link_libraries(
     codal-microbit
-    codal-mbed
-    ble-nrf51822
+    codal-core
     nrf51-sdk
     ${LIB_OBJECT_FILES}
     ${LIB_ARCHIVE_FILES}
