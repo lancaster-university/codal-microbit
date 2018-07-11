@@ -65,7 +65,7 @@
         {
             "name":"nrf51-sdk",
             "url":"https://github.com/lancaster-university/nrf51-sdk",
-            "branch":"codal-microbit",
+            "branch":"codal-microbit-mbed",
             "type":"git"
         },
         {
