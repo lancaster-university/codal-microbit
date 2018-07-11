@@ -25,9 +25,9 @@ DEALINGS IN THE SOFTWARE.
 #ifndef MICROBIT_IO_H
 #define MICROBIT_IO_H
 
-#include "mbed.h"
 #include "CodalConfig.h"
-#include "MbedPin.h"
+#include "NRF51Pin.h"
+#include "PinMap.h"
 
 //
 // Unique Pin number for each pin (synonymous with mbedos PinName)
@@ -106,46 +106,46 @@ namespace codal
     class MicroBitIO
     {
         public:
-            _mbed::Pin          pin[0];
-            _mbed::Pin          P0;
-            _mbed::Pin          P1;
-            _mbed::Pin          P2;
-            _mbed::Pin          P3;
-            _mbed::Pin          P4;
-            _mbed::Pin          P5;
-            _mbed::Pin          P6;
-            _mbed::Pin          P7;
-            _mbed::Pin          P8;
-            _mbed::Pin          P9;
-            _mbed::Pin          P10;
-            _mbed::Pin          P11;
-            _mbed::Pin          P12;
-            _mbed::Pin          P13;
-            _mbed::Pin          P14;
-            _mbed::Pin          P15;
-            _mbed::Pin          P16;
-            _mbed::Pin          P19;
-            _mbed::Pin          P20;
+            NRF51Pin          pin[0];
+            NRF51Pin          P0;
+            NRF51Pin          P1;
+            NRF51Pin          P2;
+            NRF51Pin          P3;
+            NRF51Pin          P4;
+            NRF51Pin          P5;
+            NRF51Pin          P6;
+            NRF51Pin          P7;
+            NRF51Pin          P8;
+            NRF51Pin          P9;
+            NRF51Pin          P10;
+            NRF51Pin          P11;
+            NRF51Pin          P12;
+            NRF51Pin          P13;
+            NRF51Pin          P14;
+            NRF51Pin          P15;
+            NRF51Pin          P16;
+            NRF51Pin          P19;
+            NRF51Pin          P20;
 
-            _mbed::Pin&         buttonA;
-            _mbed::Pin&         buttonB;
+            NRF51Pin&         buttonA;
+            NRF51Pin&         buttonB;
 
-            _mbed::Pin&         scl;
-            _mbed::Pin&         sda;
+            NRF51Pin&         scl;
+            NRF51Pin&         sda;
 
-            _mbed::Pin&         col1;
-            _mbed::Pin&         col2;
-            _mbed::Pin&         col3;
-            _mbed::Pin          col4;
-            _mbed::Pin          col5;
-            _mbed::Pin          col6;
-            _mbed::Pin&         col7;
-            _mbed::Pin&         col8;
-            _mbed::Pin&         col9;
+            NRF51Pin&         col1;
+            NRF51Pin&         col2;
+            NRF51Pin&         col3;
+            NRF51Pin          col4;
+            NRF51Pin          col5;
+            NRF51Pin          col6;
+            NRF51Pin&         col7;
+            NRF51Pin&         col8;
+            NRF51Pin&         col9;
 
-            _mbed::Pin          row1;
-            _mbed::Pin          row2;
-            _mbed::Pin          row3;
+            NRF51Pin          row1;
+            NRF51Pin          row2;
+            NRF51Pin          row3;
 
             /**
              * Constructor.

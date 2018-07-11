@@ -83,7 +83,7 @@ static const MatrixPoint ledMatrixPositions[3*9] =
   */
 MicroBit::MicroBit() :
 
-    serial(USBTX, USBRX),
+    serial(io.buttonA, io.buttonB),
     messageBus(),
     timer(),
     io(),

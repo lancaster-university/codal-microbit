@@ -25,14 +25,11 @@ DEALINGS IN THE SOFTWARE.
 #ifndef MICROBIT_H
 #define MICROBIT_H
 
-#include "mbed.h"
-
 #include "MicroBitConfig.h"
 #include "CodalHeapAllocator.h"
 #include "codal-core/inc/types/Event.h"
 #include "CodalDevice.h"
 #include "ErrorNo.h"
-#include "MbedTimer.h"
 #include "Matrix4.h"
 #include "CodalCompat.h"
 #include "CodalComponent.h"
@@ -43,11 +40,11 @@ DEALINGS IN THE SOFTWARE.
 
 #include "Button.h"
 #include "MultiButton.h"
-#include "MbedPin.h"
-#include "MbedTimer.h"
-#include "MbedI2C.h"
+#include "Pin.h"
+#include "NRF51Timer.h"
+#include "I2C.h"
 
-#include "MbedSerial.h"
+#include "Serial.h"
 #include "MicroBitIO.h"
 #include "MicroBitDisplay.h"
 #include "CodalFiber.h"
@@ -61,7 +58,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitDevice.h"
 #include "MicroBitCompat.h"
 
-#include "MicroBitBLEManager.h"
+// #include "MicroBitBLEManager.h"
 //#include "MicroBitStorage.h"
 //#include "MicroBitLightSensor.h"
 
@@ -95,13 +92,13 @@ namespace codal
 
         public:
 
-            codal::_mbed::Serial        serial;
+            codal::Serial        serial;
             MessageBus                  messageBus;
-            codal::_mbed::Timer         timer;
+            codal::NRF51Timer         timer;
             MicroBitIO                  io;
-            codal::_mbed::I2C           i2c;
-            _mbed::Pin*                 ledRowPins[3];
-            _mbed::Pin*                 ledColPins[9];
+            codal::I2C           i2c;
+            Pin*                 ledRowPins[3];
+            Pin*                 ledColPins[9];
             const MatrixMap             ledMatrixMap;
             MicroBitDisplay             display;
             Button                      buttonA;
@@ -118,8 +115,8 @@ namespace codal
 
             #if CONFIG_ENABLED(MICROBIT_BLE_ENABLED)
             // Bluetooth related member variables.
-            MicroBitBLEManager		  bleManager;
-            BLEDevice                   *ble;
+            // MicroBitBLEManager		  bleManager;
+            // BLEDevice                   *ble;
             #endif
 
             /**
