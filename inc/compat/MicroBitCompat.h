@@ -37,14 +37,13 @@ DEALINGS IN THE SOFTWARE.
 #include "codal-core/inc/driver-models/Compass.h"
 #include "codal-core/inc/drivers/LEDMatrix.h"
 #include "codal-core/inc/drivers/AnimatedDisplay.h"
+#include "codal-core/inc/driver-models/Serial.h"
 #include "MicroBitIO.h"
-#include "MbedPin.h"
-#include "MbedSerial.h"
 
 //
 // MicroBit types
 //
-typedef codal::_mbed::Pin MicroBitPin;
+typedef codal::Pin MicroBitPin;
 typedef codal::Event MicroBitEvent;
 typedef codal::Listener MicroBitListener;
 typedef codal::Image MicroBitImage;
@@ -53,7 +52,7 @@ typedef codal::Button MicroBitButton;
 typedef codal::Accelerometer MicroBitAccelerometer;
 typedef codal::SerialMode MicroBitSerialMode;
 typedef codal::CodalComponent MicroBitComponent;
-typedef codal::_mbed::Serial MicroBitSerial;
+typedef codal::Serial MicroBitSerial;
 typedef codal::EventLaunchMode MicroBitEventLaunchMode;
 
 //

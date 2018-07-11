@@ -28,7 +28,8 @@ DEALINGS IN THE SOFTWARE.
 #include "CodalComponent.h"
 #include "ErrorNo.h"
 #include "CodalFiber.h"
-#include "mbed.h"
+#include "nrf51.h"
+#include "nrf51_bitfields.h"
 
 using namespace codal;
 

@@ -23,7 +23,8 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitFlash.h"
 #include "MicroBitDevice.h"
 #include "ErrorNo.h"
-#include "mbed.h"                   // NVIC
+#include "nrf51.h"
+#include "nrf51_bitfields.h"
 
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
@@ -111,7 +112,7 @@ void MicroBitFlash::erase_page(uint32_t* pg_addr)
             if (sd_flash_page_erase(((uint32_t)pg_addr)/PAGE_SIZE) == NRF_SUCCESS)
                 break;
 
-            wait_ms(10);
+            target_wait(10);
         }
         // Wait for SoftDevice to diable the write operation when it completes...
         while(!flash_op_complete);
@@ -154,7 +155,7 @@ void MicroBitFlash::flash_burn(uint32_t* addr, uint32_t* buffer, int size)
             if (sd_flash_write(addr, buffer, size) == NRF_SUCCESS)
                 break;
 
-            wait_ms(10);
+            target_wait(10);
         }
 
         // Wait for SoftDevice to diable the write operation when it completes...

@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitStorage.h"
 #include "MicroBitFlash.h"
 #include "MicroBitCompat.h"
-
+#include "nrf51.h"
 
 /**
   * Default constructor.

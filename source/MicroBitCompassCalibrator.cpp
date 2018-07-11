@@ -23,7 +23,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include "mbed.h"
+#include "codal_target_hal.h"
 #include "MicroBitCompassCalibrator.h"
 #include "Matrix4.h"
 
@@ -72,7 +72,7 @@ void MicroBitCompassCalibrator::calibrate(Event)
     const int PIXEL1_THRESHOLD = 200;
     const int PIXEL2_THRESHOLD = 800;
 
-    wait_ms(100);
+    target_wait(100);
 
 	Matrix4 X(PERIMETER_POINTS, 4);
     Point perimeter[PERIMETER_POINTS] = {{1,0,0}, {2,0,0}, {3,0,0}, {4,1,0}, {4,2,0}, {4,3,0}, {3,4,0}, {2,4,0}, {1,4,0}, {0,3,0}, {0,2,0}, {0,1,0}};
@@ -87,7 +87,7 @@ void MicroBitCompassCalibrator::calibrate(Event)
     display.scrollAsync("DRAW A CIRCLE");
 
     for (int i=0; i<110; i++)
-        wait_ms(100);
+        target_wait(100);
 
     display.stopAnimation();
     display.clear();
@@ -102,7 +102,7 @@ void MicroBitCompassCalibrator::calibrate(Event)
         int y = accelerometer.getY();
 
         // Wait a little whie for the button state to stabilise (one scheduler tick).
-        wait_ms(10);
+        target_wait(10);
 
         // Deterine the position of the user controlled pixel on the screen.
         if (x < -PIXEL2_THRESHOLD)
@@ -159,7 +159,7 @@ void MicroBitCompassCalibrator::calibrate(Event)
             }
         }
 
-        wait_ms(100);
+        target_wait(100);
     }
 
     // We have enough sample data to make a fairly accurate calibration.
@@ -186,6 +186,6 @@ void MicroBitCompassCalibrator::calibrate(Event)
     // Show a smiley to indicate that we're done, and continue on with the user program.
     display.clear();
     display.printAsync(smiley, 0, 0, 0, 1500);
-    wait_ms(1000);
+    target_wait(1000);
     display.clear();
 }
