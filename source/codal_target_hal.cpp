@@ -22,34 +22,38 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
-#include "mbed.h"
 #include "codal_target_hal.h"
 #include "CodalDmesg.h"
 #include "CodalCompat.h"
+#include "cmsis_nvic.h"
+#include "nrf51_interrupts.h"
+
+#include "nrf_delay.h"
+
 
 void target_enable_irq()
 {
-    __enable_irq();
+    asm("CPSIE I");
 }
 
 void target_disable_irq()
 {
-    __disable_irq();
+    asm("CPSID I");
 }
 
 void target_wait_for_event()
 {
-    __WFE();
+    asm("WFE");
 }
 
 void target_wait(uint32_t milliseconds)
 {
-    wait_ms(milliseconds);
+    nrf_delay_ms(milliseconds);
 }
 
 void target_wait_us(unsigned long us)
 {
-    wait_us(us);
+    nrf_delay_us(us);
 }
 
 void target_reset()
@@ -85,6 +89,7 @@ int target_random(int max)
 {
     return codal::random(max);
 }
+
 /**
   *  Thread Context for an ARM Cortex M0 core.
   *
