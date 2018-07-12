@@ -27,6 +27,8 @@ DEALINGS IN THE SOFTWARE.
 
 #include "Pin.h"
 #include "CodalConfig.h"
+#include "CodalComponent.h"
+#include "Event.h"
                                                         // Status Field flags...
 #define IO_STATUS_DIGITAL_IN                0x01        // Pin is configured as a digital input, with no pull up.
 #define IO_STATUS_DIGITAL_OUT               0x02        // Pin is configured as a digital output
@@ -36,6 +38,9 @@ DEALINGS IN THE SOFTWARE.
 #define IO_STATUS_EVENT_ON_EDGE             0x20        // Pin will generate events on pin change
 #define IO_STATUS_EVENT_PULSE_ON_EDGE       0x40        // Pin will generate events on pin change
 
+#define ID_NRF51_PIN_HI  (DEVICE_ID_IO_P0 + 35)
+#define ID_NRF51_PIN_LO  (DEVICE_ID_IO_P0 + 36)
+
 /**
   * Class definition for Pin.
   *
@@ -43,8 +48,14 @@ DEALINGS IN THE SOFTWARE.
   */
 namespace codal
 {
+    struct PinTimeStruct
+    {
+        CODAL_TIMESTAMP last_time;
+    };
+
     class NRF51Pin : public codal::Pin
     {
+        void* obj;
         /**
              * Disconnect any attached mBed IO from this pin.
              *
@@ -61,12 +72,7 @@ namespace codal
         /**
              * Interrupt handler for when an rise interrupt is triggered.
              */
-        void onRise();
-
-        /**
-             * Interrupt handler for when an fall interrupt is triggered.
-             */
-        void onFall();
+        void onRiseFall(Event);
 
         /**
              * This member function manages the calculation of the timestamp of a pulse detected
@@ -74,7 +80,7 @@ namespace codal
              *
              * @param eventValue the event value to distribute onto the message bus.
              */
-        void pulseWidthEvent(int eventValue);
+        void pulseWidthEvent(Event event);
 
         /**
              * This member function will construct an TimedInterruptIn instance, and configure

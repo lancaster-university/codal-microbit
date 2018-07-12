@@ -98,6 +98,9 @@ DEALINGS IN THE SOFTWARE.
 #define ID_PIN_P30       (DEVICE_ID_IO_P0 + 30)
 #define ID_PIN_P31       (DEVICE_ID_IO_P0 + 31)
 
+#define ID_NRF51_PIN_HI  (DEVICE_ID_IO_P0 + 35)
+#define ID_NRF51_PIN_LO  (DEVICE_ID_IO_P0 + 36)
+
 namespace codal
 {
     /**
