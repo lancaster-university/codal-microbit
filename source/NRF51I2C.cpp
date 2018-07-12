@@ -153,7 +153,7 @@ int NRF51I2C::read(AcknowledgeType ack)
     // if (ack == NACK)
     //      NRF_TWI0->SHORTS |= 1 << 1;
 
-    NRF_TWI0->TASKS_STARTRX
+    NRF_TWI0->TASKS_STARTRX = 1;
     NRF_TWI0->TASKS_RESUME = 1;
 
     while (NRF_TWI0->EVENTS_RXDREADY == 0)
