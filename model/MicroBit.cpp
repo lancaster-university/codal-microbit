@@ -69,8 +69,8 @@ MicroBit::MicroBit() :
     buttonB(io.buttonB, DEVICE_ID_BUTTON_B, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW),
     buttonAB(DEVICE_ID_BUTTON_A, DEVICE_ID_BUTTON_B, DEVICE_ID_BUTTON_AB),
     coordinateSpace(SIMPLE_CARTESIAN, true),
-    accelerometer(i2c, io.accelerometerInt, coordinateSpace),
-    compass(i2c, io.compassInt, accelerometer, coordinateSpace),
+    // accelerometer(i2c, io.accelerometerInt, coordinateSpace),
+    // compass(i2c, io.compassInt, accelerometer, coordinateSpace),
     radio(),
     compassCalibrator(compass, accelerometer, display),
     thermometer()

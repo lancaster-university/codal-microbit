@@ -109,8 +109,8 @@ namespace codal
             Button                      buttonB;
             MultiButton                 buttonAB;
             CoordinateSpace             coordinateSpace;
-            MMA8653                     accelerometer;
-            MAG3110                     compass;
+            // MMA8653                     accelerometer;
+            // MAG3110                     compass;
             MicroBitRadio               radio;
             MicroBitCompassCalibrator   compassCalibrator;
             MicroBitThermometer         thermometer;
