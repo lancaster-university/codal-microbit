@@ -112,7 +112,7 @@ namespace codal
             // MMA8653                     accelerometer;
             // MAG3110                     compass;
             MicroBitRadio               radio;
-            MicroBitCompassCalibrator   compassCalibrator;
+            // MicroBitCompassCalibrator   compassCalibrator;
             MicroBitThermometer         thermometer;
 
 

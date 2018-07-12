@@ -72,7 +72,7 @@ MicroBit::MicroBit() :
     // accelerometer(i2c, io.accelerometerInt, coordinateSpace),
     // compass(i2c, io.compassInt, accelerometer, coordinateSpace),
     radio(),
-    compassCalibrator(compass, accelerometer, display),
+    // compassCalibrator(compass, accelerometer, display),
     thermometer()
 {
     // Clear our status
