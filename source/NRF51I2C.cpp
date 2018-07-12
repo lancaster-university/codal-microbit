@@ -39,19 +39,6 @@ void NRF51I2C::init()
 
     NRF_TWI0->POWER = 1;
 
-    NRF_TWI0->PSELSCL = scl.name;
-    NRF_TWI0->PSELSDA = sda.name;
-
-    NRF_TWI0->EVENTS_ERROR = 0;
-    NRF_TWI0->ENABLE       = TWI_ENABLE_ENABLE_Disabled << TWI_ENABLE_ENABLE_Pos;
-    NRF_TWI0->POWER        = 0;
-
-    for (int i = 0; i<100; i++){}
-
-    NRF_TWI0->POWER = 1;
-
-    NRF_TWI0->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);
-
     NRF_GPIO->PIN_CNF[scl.name] = ((GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos) |
                               (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos) |
                               (GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos) |
@@ -63,12 +50,16 @@ void NRF51I2C::init()
                               (GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos) |
                               (GPIO_PIN_CNF_DRIVE_S0D1 << GPIO_PIN_CNF_DRIVE_Pos) |
                               (GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos));
+
+    NRF_TWI0->PSELSCL = scl.name;
+    NRF_TWI0->PSELSDA = sda.name;
+
+    NRF_TWI0->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);
 }
 
 NRF51I2C::NRF51I2C(Pin &sda, Pin &scl) : I2C(sda,scl), sda(sda), scl(scl)
 {
     init();
-    setFrequency(400000);
 }
 
 /** Set the frequency of the I2C interface
@@ -134,7 +125,7 @@ int NRF51I2C::write(uint8_t data)
 {
     int timeOut = 100000;
     NRF_TWI0->TXD = data;
-
+    NRF_TWI0->TASKS_STARTTX = 1;
     while (NRF_TWI0->EVENTS_TXDSENT == 0)
     {
         timeOut--;
@@ -159,9 +150,10 @@ int NRF51I2C::read(AcknowledgeType ack)
 
     // To trigger stop task when a byte is received,
     // must be set before resume task.
-    if (ack == NACK)
-         NRF_TWI0->SHORTS |= 1 << 1;
+    // if (ack == NACK)
+    //      NRF_TWI0->SHORTS |= 1 << 1;
 
+    NRF_TWI0->TASKS_STARTRX
     NRF_TWI0->TASKS_RESUME = 1;
 
     while (NRF_TWI0->EVENTS_RXDREADY == 0)

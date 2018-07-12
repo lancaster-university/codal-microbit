@@ -28,8 +28,9 @@ DEALINGS IN THE SOFTWARE.
 #include "cmsis_nvic.h"
 #include "nrf51_interrupts.h"
 
+extern "C" {
 #include "nrf_delay.h"
-
+}
 
 void target_enable_irq()
 {

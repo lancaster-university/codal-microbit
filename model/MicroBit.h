@@ -42,7 +42,11 @@ DEALINGS IN THE SOFTWARE.
 #include "MultiButton.h"
 #include "Pin.h"
 #include "NRF51Timer.h"
+#include "NRF51I2C.h"
 #include "I2C.h"
+
+#include "MAG3110.h"
+#include "MMA8653.h"
 
 #include "Serial.h"
 #include "MicroBitIO.h"
@@ -94,20 +98,22 @@ namespace codal
 
             codal::Serial        serial;
             MessageBus                  messageBus;
-            codal::NRF51Timer         timer;
+            codal::NRF51Timer           timer;
             MicroBitIO                  io;
-            codal::I2C           i2c;
-            Pin*                 ledRowPins[3];
-            Pin*                 ledColPins[9];
+            NRF51I2C                      i2c;
+            Pin*                        ledRowPins[3];
+            Pin*                        ledColPins[9];
             const MatrixMap             ledMatrixMap;
             MicroBitDisplay             display;
             Button                      buttonA;
             Button                      buttonB;
             MultiButton                 buttonAB;
-            MicroBitRadio               radio;
-            MicroBitThermometer         thermometer;
             CoordinateSpace             coordinateSpace;
-            // MicroBitCompassCalibrator   compassCalibrator;
+            MMA8653                     accelerometer;
+            MAG3110                     compass;
+            MicroBitRadio               radio;
+            MicroBitCompassCalibrator   compassCalibrator;
+            MicroBitThermometer         thermometer;
 
 
             // Persistent key value store

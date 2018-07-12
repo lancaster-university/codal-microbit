@@ -147,6 +147,9 @@ namespace codal
             NRF51Pin          row2;
             NRF51Pin          row3;
 
+            NRF51Pin          compassInt;
+            NRF51Pin          accelerometerInt;
+
             /**
              * Constructor.
              *

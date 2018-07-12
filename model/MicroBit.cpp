@@ -31,35 +31,6 @@ using namespace codal;
 //
 // Matrix layout model for LED Matrix
 //
-// static const MatrixPoint ledMatrixPositions[5*5] =
-// {
-//     {0,0},{0,1},{0,2},{0,3},{0,4},
-//     {1,0},{1,1},{1,2},{1,3},{1,4},
-//     {2,0},{2,1},{2,2},{2,3},{2,4},
-//     {3,0},{3,1},{3,2},{3,3},{3,4},
-//     {4,0},{4,1},{4,2},{4,3},{4,4}
-// };
-
-// static const MatrixPoint ledMatrixPositions[5*5] =
-// {
-//     {0,0},{1,3},{0,1},{1,4},{0,2},
-//     {2,3},{2,4},{2,5},{2,6},{2,7},
-//     {1,1},{0,8},{1,2},{2,8},{1,0},
-//     {0,7},{0,6},{0,5},{0,4},{0,3},
-//     {2,2},{1,6},{2,0},{1,5},{2,1}
-// };
-
-
-// static const MatrixPoint ledMatrixPositions[5*5] =
-// {
-//     {0,0},{3,1},{1,0},{4,1},{2,0},
-//     {3,2},{4,2},{5,2},{6,2},{7,2},
-//     {1,1},{8,0},{2,1},{8,2},{0,1},
-//     {7,0},{6,0},{5,0},{4,0},{3,0},
-//     {2,2},{6,1},{0,2},{5,1},{1,2}
-// };
-
-
 static const MatrixPoint ledMatrixPositions[3*9] =
 {
     {0,0},{4,2},{2,4},
@@ -97,10 +68,12 @@ MicroBit::MicroBit() :
     buttonA(io.buttonA, DEVICE_ID_BUTTON_A, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW),
     buttonB(io.buttonB, DEVICE_ID_BUTTON_B, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW),
     buttonAB(DEVICE_ID_BUTTON_A, DEVICE_ID_BUTTON_B, DEVICE_ID_BUTTON_AB),
+    coordinateSpace(SIMPLE_CARTESIAN, true),
+    accelerometer(i2c, io.accelerometerInt, coordinateSpace),
+    compass(i2c, io.compassInt, accelerometer, coordinateSpace),
     radio(),
-    thermometer(),
-    coordinateSpace(SIMPLE_CARTESIAN, true)
-    // compassCalibrator(compass, accelerometer, display)
+    compassCalibrator(compass, accelerometer, display),
+    thermometer()
 {
     // Clear our status
     status = 0;
