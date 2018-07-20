@@ -40,6 +40,10 @@ using namespace codal;
 
 volatile uint32_t interrupt_enable = 0;
 
+static NRF51Pin *irq_pins[32];
+
+extern void set_gpio(int);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -51,18 +55,18 @@ void GPIOTE_IRQHandler(void)
     if ((NRF_GPIOTE->EVENTS_PORT != 0) && ((NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_PORT_Msk) != 0))
     {
         NRF_GPIOTE->EVENTS_PORT = 0;
-
-        for (uint8_t i = 0; i<31; i++)
+        NRF_GPIO->OUTSET |= (1 << 2);
+        for (uint8_t i = 0; i < 31; i++)
         {
-            if (interrupt_enable & (1 << i))
+            if (interrupt_enable & (1 << i) && irq_pins[i])
             {
                 // hi
                 if ((inVal >> i ) & 1 && ((NRF_GPIO->PIN_CNF[i] >> GPIO_PIN_CNF_SENSE_Pos) & GPIO_PIN_CNF_SENSE_Low) != GPIO_PIN_CNF_SENSE_Low)
-                    Event(ID_NRF51_PIN_HI, i);
+                    irq_pins[i]->rise();
 
                 // lo
                 if ((((inVal >> i ) & 1) == 0) && ((NRF_GPIO->PIN_CNF[i] >> GPIO_PIN_CNF_SENSE_Pos) & GPIO_PIN_CNF_SENSE_Low) == GPIO_PIN_CNF_SENSE_Low)
-                    Event(ID_NRF51_PIN_LO, i);
+                    irq_pins[i]->fall();
 
                 // now enable the opposite interrupt to the one we just received to avoid repeat interrupts.
                 if (NRF_GPIO->PIN_CNF[i] & GPIO_PIN_CNF_SENSE_Msk)
@@ -76,6 +80,7 @@ void GPIOTE_IRQHandler(void)
                 }
             }
         }
+        NRF_GPIO->OUTCLR |= (1 << 2);
     }
 }
 
@@ -102,6 +107,8 @@ NRF51Pin::NRF51Pin(int id, PinNumber name, PinCapability capability) : codal::Pi
 {
     this->pullMode = DEVICE_DEFAULT_PULLMODE;
 
+    irq_pins[name] = this;
+
     // Power up in a disconnected, low power state.
     // If we're unused, this is how it will stay...
     this->status = 0x00;
@@ -109,7 +116,7 @@ NRF51Pin::NRF51Pin(int id, PinNumber name, PinCapability capability) : codal::Pi
     this->obj = NULL;
 
     NRF_GPIOTE->INTENSET    = GPIOTE_INTENSET_PORT_Set << GPIOTE_INTENSET_PORT_Pos;
-    NVIC_SetPriority(GPIOTE_IRQn, 3);
+    NVIC_SetPriority(GPIOTE_IRQn, 1);
     NVIC_EnableIRQ  (GPIOTE_IRQn);
 }
 
@@ -136,12 +143,6 @@ void NRF51Pin::disconnect()
         // disconnect pin cng
         NRF_GPIO->PIN_CNF[name] &= ~(GPIO_PIN_CNF_SENSE_Msk);
         interrupt_enable &= ~(1 << this->name);
-
-        if (EventModel::defaultEventBus)
-        {
-            EventModel::defaultEventBus->ignore(ID_NRF51_PIN_HI, this->name, this, &NRF51Pin::onRiseFall);
-            EventModel::defaultEventBus->ignore(ID_NRF51_PIN_LO, this->name, this, &NRF51Pin::onRiseFall);
-        }
 
         if (obj)
             delete ((PinTimeStruct*)obj);
@@ -170,7 +171,8 @@ int NRF51Pin::setDigitalValue(int value)
         return DEVICE_NOT_SUPPORTED;
 
     // Move into a Digital output state if necessary.
-    if (!(status & IO_STATUS_DIGITAL_OUT)){
+    if (!(status & IO_STATUS_DIGITAL_OUT))
+    {
         disconnect();
 
         // Enable output mode.
@@ -556,37 +558,37 @@ int NRF51Pin::setPull(PullMode pull)
   *
   * @param eventValue the event value to distribute onto the message bus.
   */
-void NRF51Pin::pulseWidthEvent(Event event)
+void NRF51Pin::pulseWidthEvent(uint16_t eventValue)
 {
-    uint64_t now = event.timestamp;
+    Event evt(id, eventValue, CREATE_ONLY);
+    uint64_t now = evt.timestamp;
     uint64_t previous = ((PinTimeStruct *)obj)->last_time;
 
     if (previous != 0)
     {
-        event.value = (event.source == ID_NRF51_PIN_HI)? DEVICE_PIN_EVT_RISE : DEVICE_PIN_EVT_FALL;
-        event.source = this->id;
-        event.timestamp -= previous;
-        event.fire();
+        evt.timestamp -= previous;
+        evt.fire();
     }
 
     ((PinTimeStruct *)obj)->last_time = now;
 }
 
-/**
-  * Interrupt handler for when an rise interrupt is triggered.
-  */
-void NRF51Pin::onRiseFall(Event e)
+void NRF51Pin::rise()
 {
     if(status & IO_STATUS_EVENT_PULSE_ON_EDGE)
-        pulseWidthEvent(e);
+        pulseWidthEvent(DEVICE_PIN_EVT_PULSE_LO);
 
-    // reuse old event.
     if(status & IO_STATUS_EVENT_ON_EDGE)
-    {
-        e.value = (e.source == ID_NRF51_PIN_HI) ? DEVICE_PIN_EVT_RISE : DEVICE_PIN_EVT_FALL;
-        e.source = this->id;
-        e.fire();
-    }
+        Event(id, DEVICE_PIN_EVT_RISE, 0);
+}
+
+void NRF51Pin::fall()
+{
+    if(status & IO_STATUS_EVENT_PULSE_ON_EDGE)
+        pulseWidthEvent(DEVICE_PIN_EVT_PULSE_HI);
+
+    if(status & IO_STATUS_EVENT_ON_EDGE)
+        Event(id, DEVICE_PIN_EVT_FALL, 0);
 }
 
 /**
@@ -614,12 +616,6 @@ int NRF51Pin::enableRiseFallEvents(int eventType)
 
         // configure as interrupt in
         interrupt_enable |= (1 << this->name);
-
-        if (EventModel::defaultEventBus)
-        {
-            EventModel::defaultEventBus->listen(ID_NRF51_PIN_HI, this->name, this, &NRF51Pin::onRiseFall);
-            EventModel::defaultEventBus->listen(ID_NRF51_PIN_LO, this->name, this, &NRF51Pin::onRiseFall);
-        }
     }
 
     status &= ~(IO_STATUS_EVENT_ON_EDGE | IO_STATUS_EVENT_PULSE_ON_EDGE);

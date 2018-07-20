@@ -56,6 +56,7 @@ namespace codal
     class NRF51Pin : public codal::Pin
     {
         void* obj;
+
         /**
              * Disconnect any attached mBed IO from this pin.
              *
@@ -70,17 +71,12 @@ namespace codal
         int obtainAnalogChannel();
 
         /**
-             * Interrupt handler for when an rise interrupt is triggered.
-             */
-        void onRiseFall(Event);
-
-        /**
              * This member function manages the calculation of the timestamp of a pulse detected
              * on a pin whilst in IO_STATUS_EVENT_PULSE_ON_EDGE or IO_STATUS_EVENT_ON_EDGE modes.
              *
              * @param eventValue the event value to distribute onto the message bus.
              */
-        void pulseWidthEvent(Event event);
+        void pulseWidthEvent(uint16_t eventValue);
 
         /**
              * This member function will construct an TimedInterruptIn instance, and configure
@@ -102,6 +98,9 @@ namespace codal
         int disableEvents();
 
         public:
+
+        void rise();
+        void fall();
 
         /**
              * Constructor.
