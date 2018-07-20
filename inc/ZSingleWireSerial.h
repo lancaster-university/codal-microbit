@@ -30,24 +30,11 @@ namespace codal
 
         static ZSingleWireSerial* instance;
 
-        volatile uint8_t* txBuff;
-        volatile uint16_t txBuffHead;
-        volatile uint16_t txBuffTail;
-
-        volatile uint8_t* rxBuff;
-        volatile uint16_t rxBuffHead;
-        volatile uint16_t rxBuffTail;
-
-        uint8_t* userBuff;
-        uint16_t targetLen;
-
-        PktSerialPkt* currentBuffer;
-        uint32_t currentBufferIndex;
+        volatile uint8_t* buffer;
+        volatile uint16_t bufferIdx;
+        volatile uint16_t bufferLength;
 
         ZSingleWireSerial(Pin& p);
-
-        void circularCopy(uint8_t *circularBuff, uint8_t circularBuffSize, uint8_t *linearBuff, uint16_t tailPosition, uint16_t headPosition);
-        void idleCallback();
 
         virtual int putc(char c);
         virtual int getc();
@@ -63,7 +50,6 @@ namespace codal
         virtual uint32_t getBaud();
 
         virtual int sendBreak();
-        int rxBufferedSize();
     };
 }
 
