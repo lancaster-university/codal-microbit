@@ -74,7 +74,7 @@ namespace codal
         // NRF_TIMER1->SHORTS = 0;
 
         NVIC_SetVector(TIMER1_IRQn, (uint32_t)TIMER1_IRQHandler);
-        NVIC_SetPriority(TIMER1_IRQn,0);
+        NVIC_SetPriority(TIMER1_IRQn, 2);
         NVIC_ClearPendingIRQ(TIMER1_IRQn);
         NVIC_EnableIRQ(TIMER1_IRQn);
 
@@ -104,12 +104,12 @@ namespace codal
      */
     void NRF51Timer::syncRequest()
     {
-        NVIC_DisableIRQ(TIMER1_IRQn);
+        __disable_irq();
         NRF_TIMER1->TASKS_CAPTURE[2] = 1;
         uint32_t snapshot = NRF_TIMER1->CC[2];
         uint32_t elapsed = snapshot - sigma;
         sigma = snapshot;
         this->sync(elapsed);
-        NVIC_EnableIRQ(TIMER1_IRQn);
+        __enable_irq();
     }
 }
