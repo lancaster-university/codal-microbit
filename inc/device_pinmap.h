@@ -1,8 +1,6 @@
 #ifndef CODAL_PINNAMES_H
 #define CODAL_PINNAMES_H
 
-#include "cmsis.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -138,7 +136,7 @@ typedef enum {
     MAG_INT1 = p29,
 
     // Not connected
-    NC = (int)0xFFFFFFFF,
+    NC = 0xFF,
 
     RX_PIN_NUMBER = TGT_RX,
     TX_PIN_NUMBER = TGT_TX,
@@ -161,13 +159,6 @@ typedef enum {
     I2C_SCL0 = p0
 
 } PinName;
-
-typedef enum {
-    PullNone = 0,
-    PullDown = 1,
-    PullUp = 3,
-    PullDefault = PullUp
-} PinMode;
 
 #ifdef __cplusplus
 }

@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include "CodalConfig.h"
 #include "NRF51Pin.h"
-#include "PinMap.h"
+#include "device_pinmap.h"
 
 //
 // Unique Pin number for each pin (synonymous with mbedos PinName)
