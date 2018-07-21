@@ -152,6 +152,8 @@ int ZSingleWireSerial::configureTx(int enable)
         NRF_UART0->PSELTXD = 0xFFFFFFFF;
         status &= ~TX_CONFIGURED;
     }
+
+    return DEVICE_OK;
 }
 
 int ZSingleWireSerial::configureRx(int enable)
@@ -178,6 +180,8 @@ int ZSingleWireSerial::configureRx(int enable)
         NRF_UART0->PSELRXD = 0xFFFFFFFF;
         status &= ~RX_CONFIGURED;
     }
+
+    return DEVICE_OK;
 }
 
 ZSingleWireSerial::ZSingleWireSerial(Pin& p) : DMASingleWireSerial(p)
@@ -190,12 +194,6 @@ ZSingleWireSerial::ZSingleWireSerial(Pin& p) : DMASingleWireSerial(p)
     buffer = NULL;
     bufferIdx = 0;
     bufferLength = 0;
-
-    NRF_GPIO->DIR |= (1 << DBG_PIN);
-    NRF_GPIO->OUTCLR |= (1 << DBG_PIN);
-
-    NRF_GPIO->DIR |= (1 << DBG_PIN2);
-    NRF_GPIO->OUTCLR |= (1 << DBG_PIN2);
 
     NRF_UART0->CONFIG = 0;
 
@@ -224,6 +222,8 @@ int ZSingleWireSerial::putc(char c)
     while(!NRF_UART0->EVENTS_TXDRDY);
     NRF_UART0->EVENTS_TXDRDY = 0;
     NRF_UART0->TXD = c;
+
+    return DEVICE_OK;
 }
 int ZSingleWireSerial::getc()
 {
@@ -272,6 +272,8 @@ int ZSingleWireSerial::sendDMA(uint8_t* data, int len)
         configureTxInterrupt(1);
 
     NRF_UART0->TXD = data[0];
+
+    return DEVICE_OK;
 }
 
 // asynchronous read (WHY NO DMA NORDIC?)
@@ -285,6 +287,8 @@ int ZSingleWireSerial::receiveDMA(uint8_t* data, int len)
     bufferIdx = 0;
 
     configureRxInterrupt(1);
+
+    return DEVICE_OK;
 }
 
 int ZSingleWireSerial::abortDMA()
@@ -295,6 +299,8 @@ int ZSingleWireSerial::abortDMA()
     buffer = NULL;
     bufferLength = 0;
     bufferIdx = 0;
+
+    return DEVICE_OK;
 }
 
 int ZSingleWireSerial::setBaud(uint32_t baud)

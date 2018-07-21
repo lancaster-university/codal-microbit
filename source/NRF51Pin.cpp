@@ -252,7 +252,7 @@ int NRF51Pin::obtainAnalogChannel()
     //     status |= IO_STATUS_ANALOG_OUT;
     // }
 
-    // return DEVICE_OK;
+    return DEVICE_NOT_IMPLEMENTED;
 }
 
 /**
@@ -280,6 +280,7 @@ int NRF51Pin::setAnalogValue(int value)
     //     return ((DynamicPwm *)pin)->write(level);
 
     // return DEVICE_OK;
+    return DEVICE_NOT_IMPLEMENTED;
 }
 
 /**
@@ -355,6 +356,7 @@ int NRF51Pin::getAnalogValue()
 
     // //perform a read!
     // return (((AnalogIn *)pin)->read_u16() >> 6);
+    return DEVICE_NOT_IMPLEMENTED;
 }
 
 /**
@@ -464,6 +466,7 @@ int NRF51Pin::setServoPulseUs(int pulseWidth)
     // }
 
     // return DEVICE_OK;
+    return DEVICE_NOT_IMPLEMENTED;
 }
 
 /**
@@ -486,6 +489,7 @@ int NRF51Pin::setAnalogPeriodUs(int period)
     // }
 
     // return ((DynamicPwm *)pin)->setPeriodUs(period);
+    return DEVICE_NOT_IMPLEMENTED;
 }
 
 /**
@@ -513,6 +517,7 @@ uint32_t NRF51Pin::getAnalogPeriodUs()
     //     return DEVICE_NOT_SUPPORTED;
 
     // return ((DynamicPwm *)pin)->getPeriodUs();
+    return DEVICE_NOT_IMPLEMENTED;
 }
 
 /**
