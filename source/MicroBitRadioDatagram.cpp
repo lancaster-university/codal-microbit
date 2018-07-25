@@ -200,5 +200,8 @@ void MicroBitRadioDatagram::packetReceived()
         p->next = packet;
     }
 
+    // general purpose drivers will listen to the higher level interface event
+    Event(DEVICE_ID_RADIO, RADIO_EVT_DATA_READY);
+    // the below event is for compatability with older drivers.
     Event(DEVICE_ID_RADIO, MICROBIT_RADIO_EVT_DATAGRAM);
 }

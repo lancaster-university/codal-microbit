@@ -34,7 +34,9 @@ namespace codal
 
 #include "CodalConfig.h"
 #include "codal-core/inc/types/Event.h"
+#include "ManagedBuffer.h"
 #include "PacketBuffer.h"
+#include "Radio.h"
 #include "MicroBitRadioDatagram.h"
 #include "MicroBitRadioEvent.h"
 
@@ -96,7 +98,7 @@ namespace codal
     };
 
 
-    class MicroBitRadio : CodalComponent
+    class MicroBitRadio : public Radio
     {
         uint8_t                 group;      // The radio group to which this micro:bit belongs.
         uint8_t                 queueDepth; // The number of packets in the receiver queue.
@@ -223,6 +225,18 @@ namespace codal
         FrameBuffer* recv();
 
         /**
+         * Retrieves the next packet from the receive buffer.
+         * If a data packet is available, then it will be returned immediately to
+         * the caller. This call will also dequeue the buffer.
+         *
+         * @return The buffer containing the the packet. If no data is available, NULL is returned.
+         *
+         * @note Once recv() has been called, it is the callers responsibility to
+         *       delete the buffer when appropriate.
+         */
+        virtual ManagedBuffer recvBuffer();
+
+        /**
          * Transmits the given buffer onto the broadcast radio.
          * The call will wait until the transmission of the packet has completed before returning.
          *
@@ -231,6 +245,16 @@ namespace codal
          * @return MICROBIT_OK on success, or MICROBIT_NOT_SUPPORTED if the BLE stack is running.
          */
         int send(FrameBuffer *buffer);
+
+        /**
+         * Transmits the given buffer onto the broadcast radio.
+         * The call will wait until the transmission of the packet has completed before returning.
+         *
+         * @param data The packet contents to transmit.
+         *
+         * @return MICROBIT_OK on success, or MICROBIT_NOT_SUPPORTED if the BLE stack is running.
+         */
+        virtual int sendBuffer(ManagedBuffer b);
     };
 }
 

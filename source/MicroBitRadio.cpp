@@ -106,7 +106,7 @@ extern "C" void RADIO_IRQHandler(void)
   * @note This class is demand activated, as a result most resources are only
   *       committed if send/recv or event registrations calls are made.
   */
-MicroBitRadio::MicroBitRadio(uint16_t id) : datagram(*this), event (*this)
+MicroBitRadio::MicroBitRadio(uint16_t id) : Radio(id), datagram(*this), event (*this)
 {
     this->id = id;
     this->status = 0;
@@ -472,6 +472,12 @@ FrameBuffer* MicroBitRadio::recv()
     return p;
 }
 
+ManagedBuffer MicroBitRadio::recvBuffer()
+{
+    PacketBuffer b = datagram.recv();
+    return ManagedBuffer(b.getBytes(), b.length());
+}
+
 /**
   * Transmits the given buffer onto the broadcast radio.
   * The call will wait until the transmission of the packet has completed before returning.
@@ -533,4 +539,9 @@ int MicroBitRadio::send(FrameBuffer *buffer)
     NVIC_EnableIRQ(RADIO_IRQn);
 
     return DEVICE_OK;
+}
+
+int MicroBitRadio::sendBuffer(ManagedBuffer b)
+{
+    return datagram.send(PacketBuffer(b.getBytes(), b.length()));
 }
