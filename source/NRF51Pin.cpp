@@ -55,7 +55,6 @@ void GPIOTE_IRQHandler(void)
     if ((NRF_GPIOTE->EVENTS_PORT != 0) && ((NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_PORT_Msk) != 0))
     {
         NRF_GPIOTE->EVENTS_PORT = 0;
-        NRF_GPIO->OUTSET |= (1 << 2);
         for (uint8_t i = 0; i < 31; i++)
         {
             if (interrupt_enable & (1 << i) && irq_pins[i])
@@ -80,7 +79,6 @@ void GPIOTE_IRQHandler(void)
                 }
             }
         }
-        NRF_GPIO->OUTCLR |= (1 << 2);
     }
 }
 
